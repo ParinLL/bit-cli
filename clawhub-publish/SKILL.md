@@ -14,14 +14,10 @@ metadata: {"openclaw": {"requires": {"bins": ["bit", "git", "go", "sudo"], "env"
 - The user wants to run Bit API operations with OpenClaw.
 - The user needs to verify Bit API availability (for example, a health check).
 
-## Installation Commands (Or GitHub Link To Installation Section)
+## Installation (GitHub)
 
-- Installation mechanism: This skill provides an OpenClaw `install spec` (`kind: go`) and also keeps manual build instructions as a fallback.
-- Risk note: Building arbitrary source code carries supply-chain risk. Review repository contents and version sources before running install steps.
-- GitHub (this project): `https://github.com/ParinLL/bit-cli`
-- README install section: `https://github.com/ParinLL/bit-cli#build-locally`
-- Safety reminder: Review source repository contents and trust level before building from source.
-- Installation commands:
+- Install source: `https://github.com/ParinLL/bit-cli`
+- Install from GitHub:
 
 ```bash
 git clone https://github.com/ParinLL/bit-cli.git
@@ -30,16 +26,7 @@ go build -o bit .
 sudo mv bit /usr/local/bin/
 ```
 
-- Alternative without `sudo` (install to user directory):
-
-```bash
-git clone https://github.com/ParinLL/bit-cli.git
-cd bit-cli
-go build -o bit .
-mkdir -p "$HOME/.local/bin"
-mv bit "$HOME/.local/bin/"
-export PATH="$HOME/.local/bin:$PATH"
-```
+- Review the repository before building from source.
 
 ## Required Environment Variables / Permissions
 
@@ -50,6 +37,71 @@ export PATH="$HOME/.local/bin:$PATH"
 - The `bit` executable must be callable from PATH.
 - Installing to `/usr/local/bin` with `sudo mv` requires administrator privileges.
 - If the target API is remote, network connectivity to that API is required.
+
+## Using The `bit` Binary
+
+- Verify installation:
+
+```bash
+which bit
+bit ping
+```
+
+- Configure API access before running commands:
+
+```bash
+export BIT_API_URL="http://localhost:4000"
+export BIT_API_KEY="your-api-key"
+```
+
+- Command format:
+- `bit <command> [arguments] [flags]`
+
+- Main commands and when to use them:
+- `bit ping`
+- Use for a quick API health check before other operations.
+- `bit create <url>`
+- Creates a short link for the target URL.
+- `bit list [--limit N] [--cursor X]`
+- Lists links with optional pagination for large datasets.
+- `bit get <id>`
+- Retrieves one link and recent click details.
+- `bit update <id> <new-url>`
+- Replaces the destination URL for an existing short link.
+- `bit delete <id>`
+- Removes the short link by ID.
+- `bit clicks <id> [--limit N] [--cursor X]`
+- Shows click history for a link, with optional pagination.
+
+- Typical workflow:
+
+```bash
+# 1) Confirm service is reachable
+bit ping
+
+# 2) Create a short link
+bit create https://example.com/docs
+
+# 3) List links to find the new ID
+bit list --limit 20
+
+# 4) Inspect one link
+bit get 1
+
+# 5) Check click records
+bit clicks 1 --limit 50
+
+# 6) Update destination if needed
+bit update 1 https://example.com/new-docs
+
+# 7) Delete when no longer needed
+bit delete 1
+```
+
+- Practical tips:
+- Start with `bit ping` whenever requests fail unexpectedly.
+- Use `list`/`get` to confirm IDs before `update` or `delete`.
+- Keep `BIT_API_KEY` in environment variables, not in command history or shared scripts.
 
 ## Common Troubleshooting
 
