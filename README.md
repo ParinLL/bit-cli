@@ -2,6 +2,12 @@
 
 CLI tool for [Bit](https://github.com/sjdonado/bit) URL Shortener, written in Go.
 
+## OpenClaw / ClawHub
+
+This skill can be used in OpenClaw.
+
+- ClawHub: https://clawhub.ai/ParinLL/bit
+
 ## Features
 
 - `ping` — Health check
