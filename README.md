@@ -26,6 +26,14 @@ cd bit-cli
 go build -o bit .
 ```
 
+## Install to PATH
+
+```bash
+cd bit-cli
+go build -o bit .
+sudo mv bit /usr/local/bin/
+```
+
 ## Usage
 
 ```bash
