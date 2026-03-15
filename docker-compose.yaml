@@ -1,0 +1,28 @@
+services:
+  bit:
+    image: sjdonado/bit:1.6.1
+    ports:
+      - "4000:4000"
+    environment:
+      ENV: production
+      DATABASE_URL: "sqlite3://./sqlite/data.db"
+      APP_URL: "http://localhost:4000"
+      ADMIN_NAME: "Admin"
+      ADMIN_API_KEY: "${BIT_ADMIN_API_KEY:-changeme}"
+    volumes:
+      - bit-data:/usr/src/app/sqlite
+
+  bit-cli:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      BIT_API_URL: "http://bit:4000"
+      BIT_API_KEY: "${BIT_API_KEY:-changeme}"
+    depends_on:
+      - bit
+    profiles:
+      - cli
+
+volumes:
+  bit-data:
